@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+	Create New Account
+{% endblock title %}
+
+{% block content %}
+	<div class="col-3">
+        <form action="{% url 'signup' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form|crispy}}
+            <input type="submit" value="Create New User" class="btn btn-outline-success">
+        </form>
+    </div>
+{% endblock content %}

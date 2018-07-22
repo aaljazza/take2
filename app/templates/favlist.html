@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Favorites View
+{% endblock title %}
+
+
+{% block content %}
+<div class="row">
+	{% for restaurant in my_list %}
+		<div class="card col-4 border-light" style="width: 18rem;">
+			<div class="shadow-lg">
+			  <img class="card-img-top" src="{{restaurant.logo.url}}" alt="Card image cap">
+			  <div class="card-body">
+			    <a href="{% url 'detail' restaurant.id %}"><h5 class="card-title">{{restaurant.name}}</h5></a>
+			    <p class="card-text">{{restaurant.slogan}}</p>
+			    {% if request.user.is_staff %}
+			      <a href="{% url 'update' restaurant.id %}"><button class="btn btn-outline-danger my-2 my-sm-0" type="button">Update</button></a>
+			  	{% endif %}
+			  	{% if request.user.is_authenticated %}
+			  	  <button class="btn btn-outline" onclick="ajax_fav({{restaurant.id}})">
+			  	  	<span class="favbutclass">
+			  	  		<i id="star-{{restaurant.id}}" class="far fa-star {% if restaurant in my_list %} text-warning {% endif %}"></i>
+			  	  	</span>
+			  	  </button>
+			  	{% endif %}
+			  </div>
+			</div>
+		</div>
+		<br>
+	{% endfor %}
+</div>
+<script type="text/javascript">
+	function ajax_fav(restaurant_id){
+		$.ajax({
+			type: "GET",
+			url: "/restaurants/" + restaurant_id + "/favorite/",
+			success: function(data){
+				console.log(data.action);
+				let my_id="#star-"+restaurant_id
+				if (data.action==="yay"){
+					$(my_id).addClass("text-warning")
+				} else {
+					$(my_id).removeClass("text-warning")
+				}
+			},
+			error: function(){
+				console.log("Unsuccessfully... check the code!");
+			}
+		})
+	}
+
+</script>
+
+
+{% endblock content %}

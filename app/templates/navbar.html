@@ -1,0 +1,52 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+  <a class="navbar-brand" href="{% url 'list' %}">Restaurant Home</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+        &nbsp &nbsp<a href="{% url 'signup' %}">      
+        <a href="{% url 'news' %}"><button class="btn btn-outline-danger my-2 my-sm-0" type="button"><strong>CNN</strong></button></a>&nbsp &nbsp
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+
+      {% if request.user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="#">user: {{request.user.username}}</a>
+        </li>      
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'create' %}">Create Restaurant</a>
+        </li>      
+      {% endif %}
+
+
+    </ul>
+      {% if request.user.is_authenticated %}  
+        {% if request.path == "/restaurants/list/" %}
+          <a href="{% url 'favlist' %}"><button class="btn btn-warning my-2 my-sm-0" type="button"><i class="far fa-star"></i> Favorites</button></a> &nbsp
+        {% endif %}
+        {% if request.path == "/restaurants/favlist/" %}
+          <a href="{% url 'list' %}"><button class="btn btn-outline-warning my-2 my-sm-0" type="button"><i class="far fa-star"></i> All Restaurants</button></a> &nbsp
+        {% endif %}
+      {% endif %}
+      {% if request.user.is_anonymous %}
+        <a href="{% url 'signin' %}">
+        <button class="btn btn-success my-2 my-sm-0" type="button">Sign In</button></a>
+        &nbsp &nbsp<a href="{% url 'signup' %}">      
+        <button class="btn btn-primary my-2 my-sm-0" type="button">Sign Up</button></a>&nbsp &nbsp
+
+      {% endif %}
+
+
+
+    <form class="form-inline my-2 my-lg-0" action="{% url 'list' %}" method="GET">
+      <input class="form-control mr-sm-2" name="q" type="Search" placeholder="Search" value="{{request.GET.q}}" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+
+    {% if request.user.is_authenticated %}
+      &nbsp
+      <a href="{% url 'signout' %}"><button class="btn btn-outline-danger my-2 my-sm-0" type="button">Sign Out</button></a> 
+    {% endif %}
+  </div>
+</nav>
+
